@@ -95,15 +95,21 @@ function generateVerificationCode() {
 
 async function sendVerificationEmail(receiverEmail, verificationCode) {
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        service: 'smtp-mail.outlook.com',
+        host: "smtp-mail.outlook.com", // hostname
+        secureConnection: false, // TLS requires secureConnection to be false
+        port: 587, // port for secure SMTP
         auth: {
-            user: 'bridgmansam03@gmail.com',
-            pass: 'lkex giss ajva eyex',
+            user: 'burealme@outlook.com',
+            pass: 'SpruceHill01062!',
         },
+        tls: {
+            ciphers:'SSLv3'
+        }
     });
     console.log("inside sendverify",receiverEmail);
     const mailOptions = {
-        from: 'bridgmansam03@gmail.com',
+        from: 'burealme@outlook.com',
         to: receiverEmail,
         subject: 'Verification Code',
         text: `Your verification code is: ${verificationCode}`,
