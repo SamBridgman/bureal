@@ -90,11 +90,11 @@ async function sendPost(text) {
     window.location.href = "homepage.html"
     console.log(json.status);
 }
-async function loadPosts() {
+async function loadPosts(mincount,maxcount) {
     const response = await fetch('/getPosts');
     const data = await response.json();
     // <div class="comment-div d-flex align-items-center justify-content-center"><span id="numOfComments"></span><i class="fa-solid fa-comment"></i></div>
-    for(let i = 0; i < data.message.length; i++) 
+    for(let i = mincount; i < maxcount; i++) 
     {   
         let ul = document.getElementById('posts');
         let li = document.createElement('li');

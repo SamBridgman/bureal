@@ -34,8 +34,8 @@
         <button id="createPost" class="send-code-btn" onclick="returnHome()" role="button">Return to Home</button>
     </div>
 
-    <div id="home-frame" class="">
-        <ol id="posts" class="posts">
+    <div id="home-frame" class="commentSection">
+        <ol id="posts" class="posts" >
             <li id="comment" class = "comment"></li>
 
         </ol>
@@ -44,7 +44,7 @@
             <input id="inputComment" placeholder="Enter a reply (300 character limit)"></input>
           </div>
           <div id="submitComments">
-            <button id="submitComment" class="send-code-btn" onclick="comment()" role="button">Comment</button>
+            <button id="submitComment" class="send-code-btn" style="border-radius:0px !important;" onclick="comment()" role="button">Comment</button>
           </div>
       </div>
     </div>
@@ -57,10 +57,9 @@
         window.location.href = "homepage.html";
     }
     function checkInput() {
-        if(document.getElementById('inputComment').value.length > 300) {
+        if(document.getElementById('inputComment').value.length > 300 || document.getElementById('inputComment').value.length == 0 ) {
           document.getElementById('submitComment').disabled = true;
           document.getElementById('inputComment').style = 'color:red;'
-          console.log('dasdasd');
         }
         else {
           document.getElementById('submitComment').disabled = false;
@@ -68,10 +67,25 @@
         }
       }
       setInterval(checkInput,100);
+
     async function comment() {
+    const d = new Date()
+    let mins;
+    if(d.getMinutes() < 10) {
+        mins = "0" + d.getMinutes();
+    }
+    else {
+        mins = d.getMinutes();
+    }
+    dformats = [d.getMonth()+1,
+        d.getDate(),
+        d.getFullYear()].join('/')+' '+
+       [d.getHours(),
+        mins].join(':');
+      console.log(dformats);
       let comment = document.getElementById('inputComment').value;
       let commentKey = sessionStorage.getItem("commentID");
-      let data = {"comment": comment,"commentKey" : commentKey}
+      let data = {"comment": comment,"commentKey" : commentKey,"Time" : dformats}
           options = {
               method:"POST",
               headers:  {
@@ -95,22 +109,31 @@
           };
         const response = await fetch('/getComment',options);
         const json = await response.json();
+      
+        console.log(json.message[0].Time)
         document.getElementById('comment').innerHTML = json.message[0].text; //load message
 
         //now comments
-        console.log(json.message[0]);
         for(let i = 0; i < json.message[0].comments.length; i++) 
        {   
         let ul = document.getElementById('posts');
         let li = document.createElement('li');
 
+        let text = "Posted " + json.message[0].comments[i][1];
+        let timestamp = document.createElement('div');
+        timestamp.appendChild(document.createTextNode(text));
+        timestamp.classList.add("timestamp");
+        timestamp.classList.add("d-flex");
+        timestamp.classList.add("align-items-center");
+        timestamp.classList.add("justify-content-left");
+
         let outerDiv = document.createElement('div');
         outerDiv.classList.add("outerDiv-home");
         let innerDiv = document.createElement('div');
         innerDiv.classList.add("innerDiv-home");
-        
+        innerDiv.appendChild(timestamp);
         let postsTexts = document.createElement('div');
-        postsTexts.appendChild(document.createTextNode(json.message[0].comments[i]));
+        postsTexts.appendChild(document.createTextNode(json.message[0].comments[i][0]));
         if(i % 2 == 0) {
             li.classList.add("even");
         }

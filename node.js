@@ -77,7 +77,8 @@ app.post('/sendData', (request,response) => {
         });
 });
 app.post('/submitComment', (request,response) => {
-    database.update({ _id: request.body.commentKey}, { $push: { comments:request.body.comment} }, {}, function () {
+    let arr = [request.body.comment,request.body.Time];
+    database.update({ _id: request.body.commentKey}, { $push: { comments:arr} }, {}, function () {
         response.json({
             status:"success",
             message: "comment pushed"
