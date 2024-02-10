@@ -48,7 +48,7 @@
     </div>
 
     <div class="btn d-flex justify-content-center">
-      <button id="send-code-btn" class="send-code-btn" onclick="sendData(document.getElementById('email-sender').value)" role="button">Send Code</button>
+      <button id="send-code-btn" class="send-code-btn" onclick="sendData(document.getElementById('email-sender').value.toLowerCase())" role="button">Send Code</button>
     </div>
 
     <script>
@@ -74,7 +74,7 @@
     }
       function checkValid() 
       {
-          if(document.getElementById('email-sender').value.includes("@bu.edu") == true && document.getElementById('email-sender').value.length > 1) 
+          if(document.getElementById('email-sender').toLowerCase().value.includes("@bu.edu") == true && document.getElementById('email-sender').value.length > 1) 
         {
           document.getElementById("send-code-btn").disabled = false;
         }

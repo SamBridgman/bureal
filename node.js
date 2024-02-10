@@ -10,7 +10,6 @@ const database = new Datastore('database.db');
 database.loadDatabase();
 const verifyDB = new Datastore('verify.db');
 verifyDB.loadDatabase();
-
 app.listen(3000,() => 
     console.log("listening")
 );
@@ -19,7 +18,7 @@ app.get('/api', (request,response) => { //client asking for data
     console.log("testing")
 });
 app.get('/getPosts', (request,response) => { //client asking for data
-    database.find({}).sort({ Time: -1 }).exec(function (err, data) {
+    database.find({}).sort({ Order: -1 }).exec(function (err, data) {
         response.json({
             status:'success',
             message: data
@@ -69,8 +68,18 @@ app.post('/verify', (request,response) => {
         }
       });
 });
+app.post('/getLength', (request,response) => {
+    database.find({}, function (err, docs) {
+        console.log('Legnth',docs.length);
+            response.json({
+                status:"success",
+                message: "ds"
+            });
+      });
+});
 app.post('/sendData', (request,response) => {
     database.insert(request.body);
+    database.find({}).sort({}).exec(function (err, docs) {});
         response.json({
             status:"success",
             message: "code is verified"

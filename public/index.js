@@ -63,7 +63,17 @@ async function checkCode(code) {
             localStorage.setItem('verify',data.code);
         }
     }
+
+
+async function getDBLength() 
+{
+    const response = await fetch('/getPosts');
+    const data = await response.json();
+    return(data.message.length);
+}
+    
 async function sendPost(text) {
+
     const d = new Date()
     let mins;
     if(d.getMinutes() < 10) {
@@ -77,7 +87,7 @@ async function sendPost(text) {
         d.getFullYear()].join('/')+' '+
        [d.getHours(),
         mins].join(':');
-    let data = {"text": text,"Time" : dformat,"comments" : []}
+    let data = {"text": text,"Time" : dformat,"comments" : [],"Order":await getDBLength()}
     options = {
         method:"POST",
         headers:  {
@@ -94,7 +104,7 @@ async function loadPosts(mincount,maxcount) {
     const response = await fetch('/getPosts');
     const data = await response.json();
     // <div class="comment-div d-flex align-items-center justify-content-center"><span id="numOfComments"></span><i class="fa-solid fa-comment"></i></div>
-    for(let i = mincount; i < maxcount; i++) 
+    for(let i = mincount; i < maxcount ; i++) 
     {   
         let ul = document.getElementById('posts');
         let li = document.createElement('li');
@@ -140,7 +150,7 @@ async function loadPosts(mincount,maxcount) {
 
         commentDiv.appendChild(iObj);
         commentDiv.appendChild(span);
-        iObj.onclick = function() {sessionStorage.setItem("commentID", iObj.getAttribute('id')); window.location.href = "comment.html";};
+        li.onclick = function() {sessionStorage.setItem("commentID", iObj.getAttribute('id')); window.location.href = "comment.html";};
         outerDiv.appendChild(postsTexts);
         outerDiv.appendChild(commentDiv);
         innerDiv.appendChild(timestamp);
